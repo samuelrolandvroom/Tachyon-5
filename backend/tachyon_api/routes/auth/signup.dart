@@ -77,9 +77,32 @@ Future<Response> onRequest(RequestContext context) async {
       phoneNumber: phoneNumber,
     );
 
+    // Fetch the newly created user to return full profile
+    final user = await userRepo.findUserByEmail(email);
+    if (user == null) {
+      throw Exception('Failed to fetch user after creation');
+    }
+
+    final token = authService.generateToken(user['id'] as String);
+
     return Response.json(
       statusCode: HttpStatus.created,
-      body: {'message': 'User created successfully'},
+      body: {
+        'token': token,
+        'user': {
+          'id': user['id'],
+          'username': user['username'],
+          'email': user['email'],
+          'phoneNumber': user['phone_number'],
+          'firstName': user['first_name'],
+          'middleName': user['middle_name'],
+          'lastName': user['last_name'],
+          'profilePhoto': user['profile_photo'],
+          'bio': user['bio'],
+          'createdAt': (user['created_at'] as DateTime).toIso8601String(),
+          'updatedAt': (user['updated_at'] as DateTime).toIso8601String(),
+        },
+      },
     );
   } catch (e) {
     return Response.json(

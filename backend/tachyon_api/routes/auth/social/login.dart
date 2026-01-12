@@ -44,14 +44,20 @@ Future<Response> onRequest(RequestContext context) async {
       final jwtToken = authService.generateToken(user['id'] as String);
       return Response.json(
         body: {
-          'status': 'complete',
+          'isProfileComplete': true,
           'token': jwtToken,
           'user': {
             'id': user['id'],
             'username': user['username'],
             'email': user['email'],
+            'phoneNumber': user['phone_number'],
             'firstName': user['first_name'],
+            'middleName': user['middle_name'],
             'lastName': user['last_name'],
+            'profilePhoto': user['profile_photo'],
+            'bio': user['bio'],
+            'createdAt': (user['created_at'] as DateTime).toIso8601String(),
+            'updatedAt': (user['updated_at'] as DateTime).toIso8601String(),
           }
         },
       );
@@ -59,7 +65,7 @@ Future<Response> onRequest(RequestContext context) async {
       // User not found, return "incomplete" status for profile completion
       return Response.json(
         body: {
-          'status': 'incomplete',
+          'isProfileComplete': false,
           'socialData': {
             'provider': socialInfo.provider,
             'providerUserId': socialInfo.providerUserId,

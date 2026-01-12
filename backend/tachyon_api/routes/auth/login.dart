@@ -60,6 +60,8 @@ Future<Response> onRequest(RequestContext context) async {
           'lastName': user['last_name'],
           'profilePhoto': user['profile_photo'],
           'bio': user['bio'],
+          'createdAt': (user['created_at'] as DateTime).toIso8601String(),
+          'updatedAt': (user['updated_at'] as DateTime).toIso8601String(),
         },
       },
     );

@@ -64,15 +64,12 @@ Future<Response> onRequest(RequestContext context) async {
     }
 
     // 2. Create User
-    // For social users, the primary email is usually the social email.
-    // We use a random hash for password if one isn't provided (since they log in via social).
     final hashedPassword = authService.hashPassword(
         password ?? 'social_login_${DateTime.now().millisecondsSinceEpoch}');
 
     await userRepo.createUser(
       username: username,
-      email: socialEmail ??
-          '$username@social.placeholder', // Fallback if no email from social
+      email: socialEmail ?? '$username@social.placeholder',
       passwordHash: hashedPassword,
       firstName: firstName,
       middleName: middleName,
@@ -83,8 +80,11 @@ Future<Response> onRequest(RequestContext context) async {
     );
 
     // 3. Link Social Account
-    final newUser = await userRepo.findUserByUsername(username);
-    final userId = newUser!['id'] as String;
+    final userMap = await userRepo.findUserByUsername(username);
+    if (userMap == null) {
+      throw Exception('Failed to fetch user after creation');
+    }
+    final userId = userMap['id'] as String;
 
     await userRepo.linkSocialAccount(
       userId: userId,
@@ -93,7 +93,7 @@ Future<Response> onRequest(RequestContext context) async {
       email: socialEmail,
     );
 
-    // 4. Return JWT
+    // 4. Return AuthResponse
     final jwtToken = authService.generateToken(userId);
 
     return Response.json(
@@ -103,9 +103,15 @@ Future<Response> onRequest(RequestContext context) async {
         'user': {
           'id': userId,
           'username': username,
-          'email': socialEmail,
-          'firstName': firstName,
-          'lastName': lastName,
+          'email': userMap['email'],
+          'phoneNumber': userMap['phone_number'],
+          'firstName': userMap['first_name'],
+          'middleName': userMap['middle_name'],
+          'lastName': userMap['last_name'],
+          'profilePhoto': userMap['profile_photo'],
+          'bio': userMap['bio'],
+          'createdAt': (userMap['created_at'] as DateTime).toIso8601String(),
+          'updatedAt': (userMap['updated_at'] as DateTime).toIso8601String(),
         }
       },
     );
