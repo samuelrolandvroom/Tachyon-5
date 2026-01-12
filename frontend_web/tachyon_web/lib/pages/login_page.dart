@@ -61,7 +61,7 @@ class _LoginPageState extends State<LoginPage> {
       final response = await authRepo.socialLogin(providerName, mockToken);
 
       if (mounted) {
-        if (response.isProfileComplete ?? true) {
+        if (response.status == 'complete') {
           // Existing user - redirect to onboarding
           setState(() => _showSuccess = true);
           await Future.delayed(const Duration(milliseconds: 1500));
