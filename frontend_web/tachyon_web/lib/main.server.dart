@@ -31,7 +31,7 @@ void main() {
         css.import(
           'https://fonts.googleapis.com/css2?family=Michroma&family=Inter:wght@400;700&family=JetBrains+Mono&display=swap',
         ),
-        css.import('theme.css'),
+        css.import('/theme.css'),
       ],
       body: App(),
     ),
