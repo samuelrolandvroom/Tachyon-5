@@ -3,8 +3,8 @@ import 'package:jaspr/dom.dart';
 import 'package:jaspr_riverpod/jaspr_riverpod.dart';
 import 'package:jaspr_router/jaspr_router.dart';
 import 'package:tachyon_api_client/tachyon_api_client.dart';
-import 'package:tachyon_core/tachyon_core.dart';
 import '../components/notification.dart' as toast;
+import '../components/social_login_button.dart';
 
 class LoginPage extends StatefulComponent {
   const LoginPage({super.key});
@@ -35,6 +35,43 @@ class _LoginPageState extends State<LoginPage> {
         await Future.delayed(const Duration(milliseconds: 1500));
         if (mounted) {
           Router.of(context).push('/onboarding');
+        }
+      }
+    } catch (e) {
+      setState(() => _error = _formatError(e.toString()));
+    } finally {
+      if (mounted) setState(() => _isLoading = false);
+    }
+  }
+
+  Future<void> _handleSocialLogin(BuildContext context, SocialProvider provider) async {
+    setState(() {
+      _isLoading = true;
+      _error = null;
+      _showSuccess = false;
+    });
+
+    try {
+      final authRepo = context.read(authRepositoryProvider);
+      final providerName = provider.name;
+
+      // For development, use mock token
+      final mockToken = 'mock_${providerName}_${DateTime.now().millisecondsSinceEpoch}';
+
+      final response = await authRepo.socialLogin(providerName, mockToken);
+
+      if (mounted) {
+        if (response.isProfileComplete ?? true) {
+          // Existing user - redirect to onboarding
+          setState(() => _showSuccess = true);
+          await Future.delayed(const Duration(milliseconds: 1500));
+          if (mounted) {
+            Router.of(context).push('/onboarding');
+          }
+        } else {
+          // New user - needs profile completion
+          // TODO: Navigate to profile completion page
+          setState(() => _error = 'Profile completion not yet implemented');
         }
       }
     } catch (e) {
@@ -90,6 +127,25 @@ class _LoginPageState extends State<LoginPage> {
             onClick: () => _login(context),
             [text(_isLoading ? 'Processing...' : 'Continue')],
           ),
+
+          // Social Login Section
+          div(classes: 'social-divider', [text('or continue with')]),
+
+          div(classes: 'social-buttons', [
+            SocialLoginButton(
+              provider: SocialProvider.google,
+              onPressed: () => _handleSocialLogin(context, SocialProvider.google),
+            ),
+            SocialLoginButton(
+              provider: SocialProvider.microsoft,
+              onPressed: () => _handleSocialLogin(context, SocialProvider.microsoft),
+            ),
+            SocialLoginButton(
+              provider: SocialProvider.apple,
+              onPressed: () => _handleSocialLogin(context, SocialProvider.apple),
+            ),
+          ]),
+
           p([
             text("Don't have an account? "),
             a(href: '/signup', [text('Sign Up')]),

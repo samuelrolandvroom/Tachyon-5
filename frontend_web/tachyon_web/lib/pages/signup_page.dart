@@ -3,8 +3,8 @@ import 'package:jaspr/dom.dart';
 import 'package:jaspr_riverpod/jaspr_riverpod.dart';
 import 'package:jaspr_router/jaspr_router.dart';
 import 'package:tachyon_api_client/tachyon_api_client.dart';
-import 'package:tachyon_core/tachyon_core.dart';
 import '../components/notification.dart' as toast;
+import '../components/social_login_button.dart';
 
 class SignupPage extends StatefulComponent {
   const SignupPage({super.key});
@@ -65,6 +65,43 @@ class _SignupPageState extends State<SignupPage> {
     }
   }
 
+  Future<void> _handleSocialLogin(BuildContext context, SocialProvider provider) async {
+    setState(() {
+      _isLoading = true;
+      _error = null;
+      _showSuccess = false;
+    });
+
+    try {
+      final authRepo = context.read(authRepositoryProvider);
+      final providerName = provider.name;
+
+      // For development, use mock token
+      final mockToken = 'mock_${providerName}_${DateTime.now().millisecondsSinceEpoch}';
+
+      final response = await authRepo.socialLogin(providerName, mockToken);
+
+      if (mounted) {
+        if (response.isProfileComplete ?? true) {
+          // Existing user - redirect to onboarding
+          setState(() => _showSuccess = true);
+          await Future.delayed(const Duration(milliseconds: 1500));
+          if (mounted) {
+            Router.of(context).push('/onboarding');
+          }
+        } else {
+          // New user - needs profile completion
+          // TODO: Navigate to profile completion page
+          setState(() => _error = 'Profile completion not yet implemented');
+        }
+      }
+    } catch (e) {
+      setState(() => _error = _formatError(e.toString()));
+    } finally {
+      if (mounted) setState(() => _isLoading = false);
+    }
+  }
+
   String _formatError(String error) {
     if (error.contains('email already exists')) {
       return 'This email is already registered';
@@ -100,6 +137,25 @@ class _SignupPageState extends State<SignupPage> {
         p(classes: 'tagline', [text('LOGICAL VELOCITY')]),
         div(classes: 'auth-form', [
           h2([text('Create Account')]),
+
+          // Social Login Section (at top for signup)
+          div(classes: 'social-buttons', [
+            SocialLoginButton(
+              provider: SocialProvider.google,
+              onPressed: () => _handleSocialLogin(context, SocialProvider.google),
+            ),
+            SocialLoginButton(
+              provider: SocialProvider.microsoft,
+              onPressed: () => _handleSocialLogin(context, SocialProvider.microsoft),
+            ),
+            SocialLoginButton(
+              provider: SocialProvider.apple,
+              onPressed: () => _handleSocialLogin(context, SocialProvider.apple),
+            ),
+          ]),
+
+          div(classes: 'social-divider', [text('or sign up with email')]),
+
           div(classes: 'name-row', [
             input(
               classes: 'atlantis-input',
