@@ -9,6 +9,14 @@ class LoginPage extends StatefulComponent {
 
   @override
   State<LoginPage> createState() => _LoginPageState();
+
+  @css
+  static List<StyleRule> get styles => [
+    css('.error-text').styles(
+      color: Color('#EF4444'),
+      padding: .all(10.px),
+    ),
+  ];
 }
 
 class _LoginPageState extends State<LoginPage> {
@@ -74,12 +82,4 @@ class _LoginPageState extends State<LoginPage> {
       ]),
     ]);
   }
-
-  @css
-  static List<StyleRule> get styles => [
-    css('.error-text').styles(
-      color: Color('#EF4444'),
-      padding: .all(10.px),
-    ),
-  ];
 }

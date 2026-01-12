@@ -9,6 +9,21 @@ class SignupPage extends StatefulComponent {
 
   @override
   State<SignupPage> createState() => _SignupPageState();
+
+  @css
+  static List<StyleRule> get styles => [
+    css('.name-row').styles(
+      display: .flex,
+      justifyContent: .spaceBetween,
+    ),
+    css('.name-row input').styles(
+      width: 48.percent,
+    ),
+    css('.error-text').styles(
+      color: Color('#EF4444'),
+      padding: .all(10.px),
+    ),
+  ];
 }
 
 class _SignupPageState extends State<SignupPage> {
@@ -104,19 +119,4 @@ class _SignupPageState extends State<SignupPage> {
       ]),
     ]);
   }
-
-  @css
-  static List<StyleRule> get styles => [
-    css('.name-row').styles(
-      display: .flex,
-      justifyContent: .spaceBetween,
-    ),
-    css('.name-row input').styles(
-      width: 48.percent,
-    ),
-    css('.error-text').styles(
-      color: Color('#EF4444'),
-      padding: .all(10.px),
-    ),
-  ];
 }
