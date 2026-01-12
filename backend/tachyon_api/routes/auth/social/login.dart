@@ -44,7 +44,7 @@ Future<Response> onRequest(RequestContext context) async {
       final jwtToken = authService.generateToken(user['id'] as String);
       return Response.json(
         body: {
-          'isProfileComplete': true,
+          'status': 'complete',
           'token': jwtToken,
           'user': {
             'id': user['id'],
@@ -65,7 +65,7 @@ Future<Response> onRequest(RequestContext context) async {
       // User not found, return "incomplete" status for profile completion
       return Response.json(
         body: {
-          'isProfileComplete': false,
+          'status': 'incomplete',
           'socialData': {
             'provider': socialInfo.provider,
             'providerUserId': socialInfo.providerUserId,
