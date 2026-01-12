@@ -3,6 +3,7 @@ import 'package:jaspr/dom.dart';
 import 'package:jaspr_riverpod/jaspr_riverpod.dart';
 import 'package:jaspr_router/jaspr_router.dart';
 import 'package:tachyon_api_client/tachyon_api_client.dart';
+import 'package:tachyon_core/tachyon_core.dart';
 
 class SignupPage extends StatefulComponent {
   const SignupPage({super.key});
@@ -20,7 +21,7 @@ class SignupPage extends StatefulComponent {
       width: 48.percent,
     ),
     css('.error-text').styles(
-      color: Color('#EF4444'),
+      color: Color(TachyonColors.hexError),
       padding: .all(10.px),
     ),
   ];

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tachyon_core/tachyon_core.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -11,29 +12,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   final _pageController = PageController();
   int _currentPage = 0;
 
-  final List<OnboardingData> _pages = [
-    OnboardingData(
-      title: 'PRECISION',
-      description:
-          'Capture your thoughts with pixel-perfect clarity. Every note has its place.',
-      icon: Icons.track_changes,
-    ),
-    OnboardingData(
-      title: 'VELOCITY',
-      description:
-          'Synchronize across all your devices at hyper-speed. Never miss a beat.',
-      icon: Icons.speed,
-    ),
-    OnboardingData(
-      title: 'INTELLIGENCE',
-      description: 'Tachyon-5 learns your workflow and anticipates your needs.',
-      icon: Icons.psychology,
-    ),
-  ];
-
   @override
   Widget build(BuildContext context) {
-    final silver = Theme.of(context).colorScheme.onSurface;
+    final silver = Color(TachyonColors.lanteanSilver);
 
     return Scaffold(
       body: Stack(
@@ -41,18 +22,17 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           PageView.builder(
             controller: _pageController,
             onPageChanged: (index) => setState(() => _currentPage = index),
-            itemCount: _pages.length,
+            itemCount: OnboardingData.pages.length,
             itemBuilder: (context, index) {
-              final page = _pages[index];
+              final page = OnboardingData.pages[index];
               return Padding(
                 padding: const EdgeInsets.all(48.0),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(
-                      page.icon,
-                      size: 100,
-                      color: Theme.of(context).primaryColor,
+                    Text(
+                      page.iconIdentifier,
+                      style: const TextStyle(fontSize: 100),
                     ),
                     const SizedBox(height: 48),
                     Text(
@@ -80,7 +60,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: List.generate(
-                    _pages.length,
+                    OnboardingData.pages.length,
                     (index) => Container(
                       margin: const EdgeInsets.symmetric(horizontal: 4),
                       width: _currentPage == index ? 24 : 8,
@@ -97,7 +77,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 const SizedBox(height: 32),
                 ElevatedButton(
                   onPressed: () {
-                    if (_currentPage < _pages.length - 1) {
+                    if (_currentPage < OnboardingData.pages.length - 1) {
                       _pageController.nextPage(
                         duration: const Duration(milliseconds: 300),
                         curve: Curves.easeInOut,
@@ -107,7 +87,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     }
                   },
                   child: Text(
-                    _currentPage == _pages.length - 1 ? 'GET STARTED' : 'NEXT',
+                    _currentPage == OnboardingData.pages.length - 1
+                        ? 'GET STARTED'
+                        : 'NEXT',
                   ),
                 ),
               ],
@@ -117,16 +99,4 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       ),
     );
   }
-}
-
-class OnboardingData {
-  final String title;
-  final String description;
-  final IconData icon;
-
-  OnboardingData({
-    required this.title,
-    required this.description,
-    required this.icon,
-  });
 }

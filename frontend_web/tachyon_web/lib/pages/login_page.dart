@@ -3,6 +3,7 @@ import 'package:jaspr/dom.dart';
 import 'package:jaspr_riverpod/jaspr_riverpod.dart';
 import 'package:jaspr_router/jaspr_router.dart';
 import 'package:tachyon_api_client/tachyon_api_client.dart';
+import 'package:tachyon_core/tachyon_core.dart';
 
 class LoginPage extends StatefulComponent {
   const LoginPage({super.key});
@@ -13,7 +14,7 @@ class LoginPage extends StatefulComponent {
   @css
   static List<StyleRule> get styles => [
     css('.error-text').styles(
-      color: Color('#EF4444'),
+      color: Color(TachyonColors.hexError),
       padding: .all(10.px),
     ),
   ];
