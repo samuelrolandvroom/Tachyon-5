@@ -1,0 +1,82 @@
+
+:root {
+  --atlantis-blue: #00D4FF;
+  --event-horizon: #0A192F;
+  --zero-point-amber: #FFB800;
+  --lantean-silver: #E2E8F0;
+  --shield-violet: #6D28D9;
+  --success: #10B981;
+  --warning: #F59E0B;
+  --error: #EF4444;
+  --info: #3B82F6;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--event-horizon);
+  color: var(--lantean-silver);
+  font-family: 'Inter', sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4 {
+  font-family: 'Michroma', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.atlantis-button {
+  background-color: var(--atlantis-blue);
+  color: #000;
+  border: none;
+  border-radius: 4px;
+  padding: 12px 24px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.2s, background-color 0.2s;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.atlantis-button:hover {
+  transform: scale(0.98);
+  filter: brightness(1.1);
+}
+
+.atlantis-input {
+  background: transparent;
+  border: 1px solid rgba(226, 232, 240, 0.2);
+  border-radius: 4px;
+  padding: 12px;
+  color: var(--lantean-silver);
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 16px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.atlantis-input:focus {
+  border-color: var(--atlantis-blue);
+  box-shadow: 0 0 8px rgba(0, 212, 255, 0.2);
+}
+
+.auth-container {
+  max-width: 400px;
+  margin: 80px auto;
+  padding: 40px;
+  text-align: center;
+}
+
+.logo-text {
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+}
+
+.tagline {
+  color: var(--atlantis-blue);
+  letter-spacing: 5px;
+  font-size: 0.8rem;
+  margin-bottom: 50px;
+}
