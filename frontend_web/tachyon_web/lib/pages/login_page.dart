@@ -25,11 +25,14 @@ class _LoginPageState extends State<LoginPage> {
     try {
       final authRepo = context.read(authRepositoryProvider);
       await authRepo.login(_identifier, _password);
-      // Navigate to home (To be implemented)
+      // Navigate to onboarding or dashboard
+      if (mounted) {
+        Router.of(context).push('/onboarding');
+      }
     } catch (e) {
       setState(() => _error = e.toString());
     } finally {
-      setState(() => _isLoading = false);
+      if (mounted) setState(() => _isLoading = false);
     }
   }
 
@@ -46,20 +49,26 @@ class _LoginPageState extends State<LoginPage> {
         input(
           classes: 'atlantis-input',
           type: InputType.text,
-          placeholder: 'Identifier',
-          onInput: (value) => _identifier = value,
+          attributes: {'placeholder': 'Identifier'},
+          onInput: (value) => _identifier = value as String,
         ),
         input(
           classes: 'atlantis-input',
           type: InputType.password,
-          placeholder: 'Password',
-          onInput: (value) => _password = value,
+          attributes: {'placeholder': 'Password'},
+          onInput: (value) => _password = value as String,
         ),
 
         if (_error != null)
-          p(styles: Styles.combine([Styles.box(padding: EdgeInsets.all(10.px)), Styles.text(color: Colors.red)]), [
-            text(_error!),
-          ]),
+          p(
+            styles: Styles.combine([
+              Styles.box(padding: EdgeInsets.all(10.px)),
+              Styles.text(color: Color.hex('#EF4444')),
+            ]),
+            [
+              text(_error!),
+            ],
+          ),
 
         button(
           classes: 'atlantis-button',

@@ -36,11 +36,13 @@ class _SignupPageState extends State<SignupPage> {
         lastName: _lastName,
       );
       // Navigate to login or onboarding
-      Router.of(context).push('/login');
+      if (mounted) {
+        Router.of(context).push('/login');
+      }
     } catch (e) {
       setState(() => _error = e.toString());
     } finally {
-      setState(() => _isLoading = false);
+      if (mounted) setState(() => _isLoading = false);
     }
   }
 
@@ -58,38 +60,42 @@ class _SignupPageState extends State<SignupPage> {
             classes: 'atlantis-input',
             styles: Styles.box(width: 48.percent),
             type: InputType.text,
-            placeholder: 'First Name',
-            onInput: (value) => _firstName = value,
+            attributes: {'placeholder': 'First Name'},
+            onInput: (value) => _firstName = value as String,
           ),
           input(
             classes: 'atlantis-input',
             styles: Styles.box(width: 48.percent),
             type: InputType.text,
-            placeholder: 'Last Name',
-            onInput: (value) => _lastName = value,
+            attributes: {'placeholder': 'Last Name'},
+            onInput: (value) => _lastName = value as String,
           ),
         ]),
 
         input(
           classes: 'atlantis-input',
           type: InputType.text,
-          placeholder: 'Username',
-          onInput: (value) => _username = value,
+          attributes: {'placeholder': 'Username'},
+          onInput: (value) => _username = value as String,
         ),
         input(
           classes: 'atlantis-input',
           type: InputType.email,
-          placeholder: 'Email',
-          onInput: (value) => _email = value,
+          attributes: {'placeholder': 'Email'},
+          onInput: (value) => _email = value as String,
         ),
         input(
           classes: 'atlantis-input',
           type: InputType.password,
-          placeholder: 'Password',
-          onInput: (value) => _password = value,
+          attributes: {'placeholder': 'Password'},
+          onInput: (value) => _password = value as String,
         ),
 
-        if (_error != null) p(styles: Styles.text(color: Colors.red), [text(_error!)]),
+        if (_error != null)
+          p(
+            styles: Styles.text(color: Color.hex('#EF4444')),
+            [text(_error!)],
+          ),
 
         button(
           classes: 'atlantis-button',
