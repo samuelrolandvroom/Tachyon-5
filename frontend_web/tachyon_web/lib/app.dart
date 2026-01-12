@@ -7,6 +7,7 @@ import 'pages/login_page.dart';
 import 'pages/signup_page.dart';
 import 'pages/onboarding_page.dart';
 
+@client
 class App extends StatelessComponent {
   const App({super.key});
 
