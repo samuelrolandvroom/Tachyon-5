@@ -1,0 +1,22 @@
+# Agent and Workspace metadata
+.agent/
+.gemini/
+
+# IDE and OS files
+.vscode/
+.idea/
+.DS_Store
+*.swp
+*.log
+
+# Environment variables
+.env
+*.env.local
+
+# Build and dependencies
+build/
+node_modules/
+.dart_tool/
+.packages
+pubspec.lock (exclude if you want to keep versioning strict, but usually ignored in libraries, kept in apps)
+!.gitignore
