@@ -1,8 +1,5 @@
-/// Support for doing something awesome.
-///
-/// More dartdocs go here.
-library;
+library tachyon_api_client;
 
-export 'src/tachyon_api_client_base.dart';
-
-// TODO: Export any libraries intended for clients of this package.
+export 'src/api_client.dart';
+export 'src/auth_repository.dart';
+export 'src/providers.dart';
