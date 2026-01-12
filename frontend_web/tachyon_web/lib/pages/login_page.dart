@@ -1,4 +1,5 @@
 import 'package:jaspr/jaspr.dart';
+import 'package:jaspr/dom.dart';
 import 'package:jaspr_riverpod/jaspr_riverpod.dart';
 import 'package:jaspr_router/jaspr_router.dart';
 import 'package:tachyon_api_client/tachyon_api_client.dart';
@@ -25,7 +26,6 @@ class _LoginPageState extends State<LoginPage> {
     try {
       final authRepo = context.read(authRepositoryProvider);
       await authRepo.login(_identifier, _password);
-      // Navigate to onboarding or dashboard
       if (mounted) {
         Router.of(context).push('/onboarding');
       }
@@ -37,8 +37,8 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   @override
-  Iterable<Component> build(BuildContext context) sync* {
-    yield div(classes: 'auth-container', [
+  Component build(BuildContext context) {
+    return div(classes: 'auth-container', [
       h1(classes: 'logo-text', [text('TACHYON-5')]),
       p(classes: 'tagline', [text('LOGICAL VELOCITY')]),
 
@@ -59,16 +59,7 @@ class _LoginPageState extends State<LoginPage> {
           onInput: (value) => _password = value as String,
         ),
 
-        if (_error != null)
-          p(
-            styles: Styles.combine([
-              Styles.box(padding: EdgeInsets.all(10.px)),
-              Styles.text(color: Color.hex('#EF4444')),
-            ]),
-            [
-              text(_error!),
-            ],
-          ),
+        if (_error != null) p(classes: 'error-text', [text(_error!)]),
 
         button(
           classes: 'atlantis-button',
@@ -83,4 +74,12 @@ class _LoginPageState extends State<LoginPage> {
       ]),
     ]);
   }
+
+  @css
+  static List<StyleRule> get styles => [
+    css('.error-text').styles(
+      color: Color('#EF4444'),
+      padding: .all(10.px),
+    ),
+  ];
 }

@@ -1,4 +1,5 @@
 import 'package:jaspr/jaspr.dart';
+import 'package:jaspr/dom.dart';
 import 'package:jaspr_router/jaspr_router.dart';
 
 class OnboardingPage extends StatefulComponent {
@@ -30,39 +31,19 @@ class _OnboardingPageState extends State<OnboardingPage> {
   ];
 
   @override
-  Iterable<Component> build(BuildContext context) sync* {
+  Component build(BuildContext context) {
     final page = _pages[_currentPage];
 
-    yield div(classes: 'auth-container', [
-      div(styles: Styles.combine([Styles.box(margin: EdgeInsets.only(bottom: 40.px))]), [
-        span(styles: Styles.text(fontSize: 80.px), [text(page.icon)]),
+    return div(classes: 'auth-container', [
+      div(classes: 'icon-container', [
+        span(classes: 'onboarding-icon', [text(page.icon)]),
       ]),
       h1([text(page.title)]),
-      p(styles: Styles.box(margin: EdgeInsets.symmetric(vertical: 24.px)), [text(page.description)]),
+      p(classes: 'onboarding-description', [text(page.description)]),
 
-      div(
-        styles: Styles.combine([
-          Styles.flexbox(justifyContent: JustifyContent.center),
-          Styles.box(margin: EdgeInsets.only(bottom: 32.px)),
-        ]),
-        [
-          for (var i = 0; i < _pages.length; i++)
-            div(
-              styles: Styles.combine([
-                Styles.box(
-                  width: i == _currentPage ? 24.px : 8.px,
-                  height: 8.px,
-                  margin: EdgeInsets.symmetric(horizontal: 4.px),
-                ),
-                Styles.background(
-                  color: i == _currentPage ? Color.hex('#00D4FF') : Color.hex('#E2E8F0').withOpacity(0.2),
-                ),
-                Styles.border(radius: BorderRadius.circular(4.px)),
-              ]),
-              [],
-            ),
-        ],
-      ),
+      div(classes: 'page-indicator', [
+        for (var i = 0; i < _pages.length; i++) div(classes: 'indicator ${i == _currentPage ? 'active' : ''}', []),
+      ]),
 
       button(
         classes: 'atlantis-button',
@@ -77,6 +58,35 @@ class _OnboardingPageState extends State<OnboardingPage> {
       ),
     ]);
   }
+
+  @css
+  static List<StyleRule> get styles => [
+    css('.icon-container').styles(
+      margin: .only(bottom: 40.px),
+    ),
+    css('.onboarding-icon').styles(
+      fontSize: 80.px,
+    ),
+    css('.onboarding-description').styles(
+      margin: .symmetric(vertical: 24.px),
+    ),
+    css('.page-indicator').styles(
+      display: .flex,
+      justifyContent: .center,
+      margin: .only(bottom: 32.px),
+    ),
+    css('.indicator').styles(
+      width: 8.px,
+      height: 8.px,
+      margin: .symmetric(horizontal: 4.px),
+      backgroundColor: Color.hex('#E2E8F0').withOpacity(0.2),
+      radius: .circular(4.px),
+    ),
+    css('.indicator.active').styles(
+      width: 24.px,
+      backgroundColor: Color.hex('#00D4FF'),
+    ),
+  ];
 }
 
 class OnboardingData {

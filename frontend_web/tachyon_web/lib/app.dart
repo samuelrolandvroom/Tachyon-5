@@ -11,8 +11,8 @@ class App extends StatelessComponent {
   const App({super.key});
 
   @override
-  Iterable<Component> build(BuildContext context) sync* {
-    yield ProviderScope(
+  Component build(BuildContext context) {
+    return ProviderScope(
       overrides: [
         apiBaseUrlProvider.overrideWithValue('http://localhost:8183'),
       ],

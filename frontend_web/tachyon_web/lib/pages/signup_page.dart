@@ -1,4 +1,5 @@
 import 'package:jaspr/jaspr.dart';
+import 'package:jaspr/dom.dart';
 import 'package:jaspr_riverpod/jaspr_riverpod.dart';
 import 'package:jaspr_router/jaspr_router.dart';
 import 'package:tachyon_api_client/tachyon_api_client.dart';
@@ -35,7 +36,6 @@ class _SignupPageState extends State<SignupPage> {
         firstName: _firstName,
         lastName: _lastName,
       );
-      // Navigate to login or onboarding
       if (mounted) {
         Router.of(context).push('/login');
       }
@@ -47,25 +47,23 @@ class _SignupPageState extends State<SignupPage> {
   }
 
   @override
-  Iterable<Component> build(BuildContext context) sync* {
-    yield div(classes: 'auth-container', [
+  Component build(BuildContext context) {
+    return div(classes: 'auth-container', [
       h1(classes: 'logo-text', [text('TACHYON-5')]),
       p(classes: 'tagline', [text('LOGICAL VELOCITY')]),
 
       div(classes: 'auth-form', [
         h2([text('Create Account')]),
 
-        div(styles: Styles.combine([Styles.flexbox(justifyContent: JustifyContent.spaceBetween)]), [
+        div(classes: 'name-row', [
           input(
             classes: 'atlantis-input',
-            styles: Styles.box(width: 48.percent),
             type: InputType.text,
             attributes: {'placeholder': 'First Name'},
             onInput: (value) => _firstName = value as String,
           ),
           input(
             classes: 'atlantis-input',
-            styles: Styles.box(width: 48.percent),
             type: InputType.text,
             attributes: {'placeholder': 'Last Name'},
             onInput: (value) => _lastName = value as String,
@@ -91,11 +89,7 @@ class _SignupPageState extends State<SignupPage> {
           onInput: (value) => _password = value as String,
         ),
 
-        if (_error != null)
-          p(
-            styles: Styles.text(color: Color.hex('#EF4444')),
-            [text(_error!)],
-          ),
+        if (_error != null) p(classes: 'error-text', [text(_error!)]),
 
         button(
           classes: 'atlantis-button',
@@ -110,4 +104,19 @@ class _SignupPageState extends State<SignupPage> {
       ]),
     ]);
   }
+
+  @css
+  static List<StyleRule> get styles => [
+    css('.name-row').styles(
+      display: .flex,
+      justifyContent: .spaceBetween,
+    ),
+    css('.name-row input').styles(
+      width: 48.percent,
+    ),
+    css('.error-text').styles(
+      color: Color('#EF4444'),
+      padding: .all(10.px),
+    ),
+  ];
 }
