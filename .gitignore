@@ -1,5 +1,6 @@
 # Agent and Workspace metadata
 .agent/
+.script/
 .gemini/
 
 # IDE and OS files
